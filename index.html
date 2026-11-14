@@ -332,7 +332,21 @@ header, main, footer {display:none!important}
  .creator-form {padding:18px}
 }
 
-</style>
+
+/* AUTH BUTTON UX */
+.reel-auth-btn {
+ background:transparent!important;
+ color:white!important;
+ border:1.5px solid #777!important;
+ padding:9px 13px!important;
+ border-radius:5px!important;
+ font-size:12px!important;
+ font-weight:900!important;
+ letter-spacing:1px;
+ min-width:76px;
+}
+.reel-auth-btn:active {transform:scale(.95)}
+\n</style>
 </head>
 <body>
 
@@ -478,7 +492,10 @@ function sendComment(){
   <div class="reel-top">
    <div class="reel-logo">Story<span>Reels</span></div>
    <div style="display:flex;gap:7px">
-    <button onclick="document.getElementById('authButton').click()">LOGIN</button>
+    <button id="reelAuthButton" class="reel-auth-btn"
+    onclick="document.getElementById('authButton').click()">
+    MASUK
+   </button>
     <button class="create-open" onclick="openCreator()">＋ CERITA</button>
    </div>
   </div>
@@ -726,5 +743,29 @@ Setiap kalimat akan menjadi bagian dari Reels."></textarea>
 })();
 </script>
 
-</body>
+
+<script>
+(() => {
+ const oldButton = document.getElementById('authButton');
+ const newButton = document.getElementById('reelAuthButton');
+
+ if (!oldButton || !newButton) return;
+
+ function syncAuthButton() {
+  const loggedIn = oldButton.textContent.trim().toLowerCase() === 'keluar';
+  newButton.textContent = loggedIn ? 'KELUAR' : 'MASUK';
+  newButton.dataset.loggedIn = loggedIn ? 'yes' : 'no';
+  newButton.title = loggedIn ? 'Keluar dari akun' : 'Masuk atau daftar';
+ }
+
+ new MutationObserver(syncAuthButton).observe(oldButton, {
+  childList:true,
+  characterData:true,
+  subtree:true
+ });
+
+ syncAuthButton();
+})();
+</script>
+\n</body>
 </html>
