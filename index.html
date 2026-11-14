@@ -243,6 +243,95 @@ footer{text-align:center;color:#555;font-size:11px;padding:10px}
  75% {transform:translateX(7px)}
 }
 
+
+/* STORYREELS_CREATOR_V1 */
+header, main, footer {display:none!important}
+.creator-app {
+ position:fixed;inset:0;z-index:10;background:#080808;color:white;
+ display:flex;justify-content:center;overflow:hidden;
+ font-family:Arial,sans-serif;
+}
+.reel-screen {
+ width:min(100vw,56.25dvh);height:100dvh;
+ position:relative;display:flex;flex-direction:column;
+ padding:16px 14px;overflow:hidden;
+ background:radial-gradient(ellipse at 50% 40%,#252525,#080808 75%);
+}
+.reel-top {display:flex;justify-content:space-between;align-items:center}
+.reel-logo {font-weight:1000;font-size:20px}
+.reel-logo span {color:#e94d79}
+.reel-top button,.create-open {
+ background:white;color:#111;border:0;padding:10px 14px;
+ font-weight:900;border-radius:3px;
+}
+.reel-text {
+ flex:1;display:flex;align-items:center;justify-content:center;
+ text-align:center;padding:20px 12px;overflow:hidden;
+}
+.reel-sentence {
+ font-size:clamp(28px,7vw,42px);font-weight:900;
+ line-height:1.35;transition:transform .35s,opacity .35s;
+}
+.reel-sentence.out {opacity:0;transform:translateY(-35px) scale(.9)}
+.reel-bottom {
+ display:flex;align-items:flex-end;gap:12px;
+ padding-bottom:12px;
+}
+.reel-info {flex:1;min-width:0}
+.reel-title {font-size:19px;font-weight:900;margin-bottom:7px}
+.reel-desc {font-size:13px;line-height:1.5;color:#bbb}
+.reel-author {font-size:12px;color:#ddd;margin-top:10px}
+.reel-actions {
+ display:flex;flex-direction:column;align-items:center;
+ gap:17px;padding-bottom:4px;
+}
+.reel-action {
+ background:transparent;border:0;color:white;
+ font-size:27px;padding:0;display:flex;flex-direction:column;
+ align-items:center;gap:3px;
+}
+.reel-action small {font-size:10px;color:#ddd}
+.reel-action.active {color:#ff477e}
+.reel-progress {width:100%;height:3px;accent-color:white}
+.reel-player-controls {
+ display:flex;justify-content:space-between;
+ font-size:11px;color:#aaa;padding-top:8px;
+}
+.creator-menu {
+ display:none;position:fixed;inset:0;z-index:30;
+ background:#fff;color:#111;overflow:auto;
+ padding:22px;align-items:center;justify-content:center;
+}
+.creator-menu.open {display:flex}
+.creator-form {
+ width:100%;max-width:440px;border:4px solid #111;
+ padding:22px;box-shadow:9px 9px 0 #111;
+ background:white;
+}
+.creator-form h2 {font-size:27px;font-weight:1000;margin:5px 0 20px}
+.creator-form label {
+ display:block;font-size:11px;font-weight:900;
+ margin:14px 0 6px;letter-spacing:1px;
+}
+.creator-form input,.creator-form textarea {
+ width:100%;padding:13px;border:3px solid #111;
+ border-radius:0;background:white;color:#111;
+ font:inherit;outline:none;
+}
+.creator-form textarea {height:220px;resize:vertical;line-height:1.5}
+.creator-form button {
+ width:100%;padding:15px;border:3px solid #111;
+ background:#111;color:white;font-weight:1000;
+ margin-top:12px;
+}
+.creator-form .cancel {
+ background:white;color:#111;
+}
+@media(max-width:480px) {
+ .creator-menu {padding:14px}
+ .creator-form {padding:18px}
+}
+
 </style>
 </head>
 <body>
@@ -383,6 +472,67 @@ function sendComment(){
 }
 </script>
 
+
+<div class="creator-app" id="creatorApp">
+ <section class="reel-screen">
+  <div class="reel-top">
+   <div class="reel-logo">Story<span>Reels</span></div>
+   <div style="display:flex;gap:7px">
+    <button onclick="document.getElementById('authButton').click()">LOGIN</button>
+    <button class="create-open" onclick="openCreator()">＋ CERITA</button>
+   </div>
+  </div>
+
+  <div class="reel-text">
+   <div class="reel-sentence" id="reelSentence">
+    Cerita pertamamu dimulai di sini.
+   </div>
+  </div>
+
+  <div class="reel-bottom">
+   <div class="reel-info">
+    <div class="reel-title" id="reelTitle">Selamat datang di StoryReels</div>
+    <div class="reel-desc" id="reelDesc">
+     Buat cerita pendekmu sendiri dan bagikan kepada dunia.
+    </div>
+    <div class="reel-author" id="reelAuthor">@StoryReels</div>
+   </div>
+   <div class="reel-actions">
+    <button class="reel-action" id="reelLike">♡<small id="reelLikes">0</small></button>
+    <button class="reel-action" id="reelComment">☏<small>Komentar</small></button>
+    <button class="reel-action" id="reelSave">★<small>Favorit</small></button>
+   </div>
+  </div>
+
+  <input class="reel-progress" id="reelProgress"
+   type="range" min="0" max="100" value="0">
+  <div class="reel-player-controls">
+   <button id="reelPlay" style="background:none;color:white;border:0">Ⅱ PAUSE</button>
+   <span id="reelCounter">1 / 1</span>
+  </div>
+ </section>
+</div>
+
+<div class="creator-menu" id="creatorMenu">
+ <div class="creator-form">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <strong>STORYREELS / CREATOR</strong>
+   <span>✳ NITIK</span>
+  </div>
+  <h2>BUAT CERITA.</h2>
+  <label>JUDUL CERITA</label>
+  <input id="newTitle" maxlength="100" placeholder="Contoh: Surat yang tak terkirim">
+  <label>DESKRIPSI</label>
+  <input id="newDescription" maxlength="180" placeholder="Ceritakan sedikit tentang kisah ini...">
+  <label>TEMPEL CERITAMU DI SINI</label>
+  <textarea id="newStory" placeholder="Paste cerita lengkapmu di sini...
+
+Setiap kalimat akan menjadi bagian dari Reels."></textarea>
+  <button onclick="startNewReel()">▶ START REELS</button>
+  <button class="cancel" onclick="closeCreator()">KEMBALI</button>
+ </div>
+</div>
+
 <div class="auth-modal" id="authModal">
  <div class="auth-card">
   <div class="kiss-zone">
@@ -460,6 +610,119 @@ function sendComment(){
   attributes:true,
   attributeFilter:['style','class']
  });
+})();
+</script>
+
+
+<script>
+(() => {
+ const $ = id => document.getElementById(id);
+ let lines = ["Cerita pertamamu dimulai di sini."];
+ let index = 0, playing = false, timer = null, liked = false, saved = false;
+ let comments = [];
+
+ function render() {
+  $("reelSentence").classList.add("out");
+  setTimeout(() => {
+   $("reelSentence").textContent = lines[index];
+   $("reelSentence").classList.remove("out");
+   $("reelCounter").textContent = (index+1)+" / "+lines.length;
+   $("reelProgress").value = lines.length > 1 ? index/(lines.length-1)*100 : 0;
+  },250);
+ }
+
+ function stop() {
+  playing = false;
+  clearInterval(timer);
+  $("reelPlay").textContent = "▶ PLAY";
+ }
+
+ function start() {
+  if (playing) return;
+  if (index >= lines.length-1) index=0;
+  playing = true;
+  $("reelPlay").textContent = "Ⅱ PAUSE";
+  timer = setInterval(() => {
+   if(index < lines.length-1) {
+    index++;
+    render();
+   } else stop();
+  },3000);
+ }
+
+ window.openCreator = () => $("creatorMenu").classList.add("open");
+ window.closeCreator = () => $("creatorMenu").classList.remove("open");
+
+ window.startNewReel = () => {
+  const title = $("newTitle").value.trim();
+  const desc = $("newDescription").value.trim();
+  const raw = $("newStory").value.trim();
+
+  if(!title || !raw) {
+   alert("Isi judul dan tempel ceritamu dulu bre!");
+   return;
+  }
+
+  lines = raw.split(/\n+/)
+   .flatMap(part => part.match(/[^.!?]+[.!?]?/g) || [])
+   .map(x => x.trim()).filter(Boolean);
+
+  if(!lines.length) {
+   alert("Cerita masih kosong.");
+   return;
+  }
+
+  stop();
+  index = 0;
+  liked = false;
+  saved = false;
+  comments = [];
+  $("reelTitle").textContent = title;
+  $("reelDesc").textContent = desc || "Sebuah cerita dari StoryReels.";
+  $("reelAuthor").textContent = "@Creator";
+  $("reelLikes").textContent = "0";
+  $("reelLike").classList.remove("active");
+  $("reelSave").classList.remove("active");
+  $("reelSave").innerHTML = '★<small>Favorit</small>';
+  $("reelComment").innerHTML = '☏<small>Komentar</small>';
+  $("reelProgress").value = 0;
+  $("creatorMenu").classList.remove("open");
+  render();
+  start();
+ };
+
+ $("reelPlay").onclick = () => playing ? stop() : start();
+
+ $("reelProgress").oninput = e => {
+  stop();
+  index = Math.round(Number(e.target.value)/100*(lines.length-1));
+  render();
+ };
+
+ $("reelLike").onclick = () => {
+  liked = !liked;
+  $("reelLike").classList.toggle("active",liked);
+  $("reelLike").innerHTML = (liked?"♥":"♡")+
+   '<small id="reelLikes">'+(liked?1:0)+'</small>';
+ };
+
+ $("reelSave").onclick = () => {
+  saved = !saved;
+  $("reelSave").classList.toggle("active",saved);
+  $("reelSave").innerHTML = (saved?"★":"☆")+
+   '<small>Favorit</small>';
+ };
+
+ $("reelComment").onclick = () => {
+  const value = prompt("Tulis komentar untuk cerita ini:");
+  if(value && value.trim()) {
+   comments.push(value.trim());
+   $("reelComment").innerHTML =
+    '☏<small>'+comments.length+' komentar</small>';
+   alert("Komentar ditambahkan (demo lokal).");
+  }
+ };
+
 })();
 </script>
 
