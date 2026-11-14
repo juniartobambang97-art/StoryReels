@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://hhhke hriwcdkofututl.supabase.co".replace(" ", "");
-const SUPABASE_ANON_KEY = "TEMPEL_PUBLISHABLE_KEY_DI_SINI";
+const SUPABASE_URL = "https://hhhkkehriwcdkofututl.supabase.co".replace(" ", "");
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoaGtrZWhyaXdjZGtvZnV0dXRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ2NzY0NzAsImV4cCI6MjExMDI1MjQ3MH0.erjHHk-AdiuxLTFtvlAVzWE670jTj0NbCY5Of5-8JdU";
 
 const db = window.supabase.createClient(
   SUPABASE_URL,
