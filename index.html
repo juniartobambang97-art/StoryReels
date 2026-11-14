@@ -115,6 +115,134 @@ footer{text-align:center;color:#555;font-size:11px;padding:10px}
 }
 #authMessage {font-size:12px;color:#ff8da8}
 
+
+/* STORYREELS - NITIK BRUTALIST AUTH */
+.auth-modal {
+ background:#fff;
+ color:#111;
+ overflow:hidden;
+ isolation:isolate;
+}
+.auth-modal::before {
+ content:"";
+ position:absolute;
+ inset:-100%;
+ z-index:-1;
+ pointer-events:none;
+ opacity:.3;
+ background-color:#fff;
+ background-image:
+  radial-gradient(circle at center, #111 1.5px, transparent 2px),
+  radial-gradient(circle at center, #111 1px, transparent 2px);
+ background-size:22px 22px, 22px 22px;
+ background-position:0 0, 11px 11px;
+ animation:nitikMove 55s linear infinite;
+}
+@keyframes nitikMove {
+ from {transform:translate(0,0)}
+ to {transform:translate(44px,44px)}
+}
+.auth-card {
+ position:relative;
+ background:#fff;
+ color:#111;
+ border:4px solid #111;
+ border-radius:0;
+ box-shadow:12px 12px 0 #111;
+ padding:25px;
+ max-width:390px;
+}
+.auth-card h2 {
+ font-size:25px;
+ font-weight:900;
+ letter-spacing:-1px;
+ text-transform:uppercase;
+}
+.auth-card input {
+ background:#fff;
+ color:#111;
+ border:3px solid #111;
+ border-radius:0;
+ padding:15px;
+}
+.auth-card input::placeholder {color:#777}
+.auth-card button {
+ border:3px solid #111;
+ border-radius:0;
+ background:#111;
+ color:#fff;
+ font-weight:900;
+}
+.auth-card button.switch {
+ background:#fff;
+ color:#111;
+}
+.auth-card #authMessage {color:#b00035}
+.auth-card > button:first-child {
+ border:0;
+ background:transparent;
+ color:#111;
+ font-size:20px;
+}
+.kiss-zone {
+ text-align:center;
+ padding:14px 10px 20px;
+ margin:8px 0 20px;
+ border-top:3px solid #111;
+ border-bottom:3px solid #111;
+}
+.kiss-emoji {
+ font-size:76px;
+ line-height:1.25;
+ display:inline-block;
+ transform-origin:center;
+ animation:kissPulse 1.15s ease-in-out infinite;
+}
+.kiss-label {
+ font-size:32px;
+ font-weight:1000;
+ letter-spacing:4px;
+ line-height:1.1;
+}
+.kiss-caption {
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:2px;
+ margin-top:9px;
+}
+.kiss-timer {
+ font-size:21px;
+ font-weight:900;
+ font-variant-numeric:tabular-nums;
+ margin-top:5px;
+}
+@keyframes kissPulse {
+ 0%,100% {transform:scale(1)}
+ 35% {transform:scale(1.28) rotate(-7deg)}
+ 65% {transform:scale(.78) rotate(5deg)}
+}
+.kiss-emoji.punch {
+ animation:punchPulse .55s ease-in-out infinite;
+}
+@keyframes punchPulse {
+ 0%,100% {transform:scale(1) rotate(0)}
+ 25% {transform:scale(1.55) rotate(-16deg)}
+ 50% {transform:scale(.72) rotate(12deg)}
+ 75% {transform:scale(1.3) rotate(-8deg)}
+}
+.kiss-zone.bogem {
+ animation:bogemShake .35s ease-in-out 3;
+}
+.kiss-zone.bogem .kiss-label {
+ font-size:38px;
+ letter-spacing:5px;
+}
+@keyframes bogemShake {
+ 0%,100% {transform:translateX(0)}
+ 25% {transform:translateX(-7px)}
+ 75% {transform:translateX(7px)}
+}
+
 </style>
 </head>
 <body>
@@ -257,6 +385,12 @@ function sendComment(){
 
 <div class="auth-modal" id="authModal">
  <div class="auth-card">
+  <div class="kiss-zone">
+   <div id="kissEmoji" class="kiss-emoji">💋</div>
+   <div id="kissLabel" class="kiss-label">KECUP</div>
+   <div class="kiss-caption">30 DETIK MENUJU BOGEM</div>
+   <div id="kissTimer" class="kiss-timer">00:30</div>
+  </div>
   <button onclick="closeAuthModal()" style="width:auto;float:right;background:transparent;color:white">✕</button>
   <h2 id="authTitle">Masuk ke StoryReels</h2>
   <form id="authForm">
@@ -270,6 +404,64 @@ function sendComment(){
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
+
+
+<script>
+(() => {
+ const modal = document.getElementById('authModal');
+ const emoji = document.getElementById('kissEmoji');
+ const label = document.getElementById('kissLabel');
+ const timerText = document.getElementById('kissTimer');
+ const zone = document.querySelector('.kiss-zone');
+
+ let countdown = null;
+ let remaining = 30;
+ let expired = false;
+
+ function resetKiss() {
+  clearInterval(countdown);
+  remaining = 30;
+  expired = false;
+  emoji.textContent = '💋';
+  emoji.classList.remove('punch');
+  label.textContent = 'KECUP';
+  zone.classList.remove('bogem');
+  timerText.textContent = '00:30';
+ }
+
+ function startKiss() {
+  resetKiss();
+
+  countdown = setInterval(() => {
+   remaining--;
+   timerText.textContent = '00:' + String(remaining).padStart(2, '0');
+
+   if (remaining <= 0) {
+    clearInterval(countdown);
+    expired = true;
+    emoji.textContent = '👊';
+    emoji.classList.add('punch');
+    label.textContent = 'BOGEM';
+    zone.classList.add('bogem');
+    timerText.textContent = 'WAKTU HABIS!';
+   }
+  }, 1000);
+ }
+
+ const observer = new MutationObserver(() => {
+  if (getComputedStyle(modal).display !== 'none') {
+   if (!countdown && !expired) startKiss();
+  } else {
+   resetKiss();
+  }
+ });
+
+ observer.observe(modal, {
+  attributes:true,
+  attributeFilter:['style','class']
+ });
+})();
+</script>
 
 </body>
 </html>
