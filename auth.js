@@ -27,9 +27,13 @@ function setAuthMode(mode) {
   document.getElementById("authMessage").textContent = "";
 }
 
-document.getElementById("authSwitch").onclick = () => {
-  setAuthMode(authMode === "login" ? "signup" : "login");
-};
+const authSwitchButton = document.getElementById("authSwitch");
+
+if (authSwitchButton) {
+  authSwitchButton.onclick = () => {
+    setAuthMode(authMode === "login" ? "signup" : "login");
+  };
+}
 
 document.getElementById("authForm").onsubmit = async (e) => {
   e.preventDefault();
@@ -73,6 +77,8 @@ document.getElementById("authForm").onsubmit = async (e) => {
 
 async function updateAuthUI(session) {
   const button = document.getElementById("authButton");
+
+  if (!button) return;
 
   if (session) {
     button.textContent = "Keluar";

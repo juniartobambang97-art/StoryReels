@@ -1,0 +1,66 @@
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080808;color:#fff;
+ font-family:Arial,sans-serif;min-height:100vh
+}
+a{color:inherit;text-decoration:none}
+header{
+ height:62px;padding:0 22px;display:flex;
+ align-items:center;justify-content:space-between;
+ border-bottom:1px solid #252525
+}
+.logo{font-size:22px;font-weight:1000;letter-spacing:-1px}
+.logo span{color:#e94d79}
+.nav-link{font-size:11px;font-weight:900;letter-spacing:1px}
+.landing{
+ min-height:calc(100vh - 62px);
+ display:flex;flex-direction:column;justify-content:center;
+ padding:30px max(25px,calc((100vw - 900px)/2));
+ position:relative
+}
+.hero{max-width:650px}
+.eyebrow{font-size:11px;letter-spacing:4px;color:#e94d79;font-weight:bold}
+.hero h1{
+ font-size:clamp(52px,11vw,100px);line-height:.95;
+ letter-spacing:-7px;margin:25px 0;font-weight:1000
+}
+.hero p{color:#999;line-height:1.7;max-width:420px;font-size:15px}
+.primary,.secondary{
+ display:inline-block;margin:25px 10px 0 0;padding:15px 20px;
+ font-size:11px;font-weight:900;letter-spacing:1px
+}
+.primary{background:white;color:#111}
+.secondary{border:1px solid #555}
+.landing-bottom{
+ position:absolute;bottom:20px;left:25px;right:25px;
+ display:flex;justify-content:space-between;
+ color:#555;font-size:9px;letter-spacing:2px
+}
+.page{max-width:1000px;margin:auto;padding:25px 18px}
+.page h1{font-size:30px;letter-spacing:-1px}
+.muted{color:#888}
+.reel-grid{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px
+}
+.reel-card{
+ min-height:190px;background:#171717;border:1px solid #292929;
+ padding:14px;display:flex;flex-direction:column;justify-content:space-between;
+ aspect-ratio:9/13
+}
+.reel-card h3{font-size:17px;line-height:1.3}
+.reel-card p{font-size:12px;color:#aaa;line-height:1.5}
+.reel-card small{color:#e94d79}
+.profile-head{
+ display:flex;align-items:center;gap:18px;margin:25px 0
+}
+.avatar{
+ width:75px;height:75px;border-radius:50%;background:#292929;
+ display:grid;place-items:center;font-size:30px;font-weight:900
+}
+.stats{display:flex;gap:25px;margin:25px 0}
+.stats strong{display:block;font-size:22px}
+.stats span{font-size:11px;color:#888}
+@media(max-width:520px){
+ .reel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero h1{letter-spacing:-4px}
+}
