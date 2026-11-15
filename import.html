@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Import Cerita — StoryReels</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.import-box{max-width:750px;margin:40px auto;padding:20px}
+.import-box textarea{width:100%;min-height:350px;padding:15px;background:#151515;color:white;border:1px solid #444;border-radius:12px;font:14px/1.6 monospace}
+.import-box button{padding:15px 22px;background:#e8ff48;color:#111;border:0;border-radius:10px;font-weight:bold;margin-top:15px}
+#result{white-space:pre-wrap;margin-top:20px}
+</style>
+</head>
+<body>
+<header>
+<a class="logo" href="index.html">Story<span>Reels</span></a>
+<a class="nav-link" href="dashboard.html">JELAJAH</a>
+</header>
+
+<main class="import-box">
+<div class="muted">STORYREELS / CREATOR TOOLS</div>
+<h1>Import Cerita</h1>
+<p>Batch 001 — 10 cerita pertama.</p>
+
+<form id="authForm" style="display:none">
+<input id="authEmail">
+<input id="authPassword">
+<button id="authButton" type="submit">Login</button>
+<button id="authSwitch" type="button">Switch</button>
+</form>
+
+<textarea id="storyInput">Judul: Kucing Terakhir di Bumi
+Cerita: Kucing itu menatapku tajam. "Kau satu-satunya manusia yang tersisa," katanya. Aku terkejut bukan karena kucing bisa bicara, tapi karena dia memakai jas dan dasi. "Dan kau terlambat bayar sewa," lanjutnya sambil menyerahkan surat penggusuran.
+
+Judul: Cinta Lewat Salah Kirim
+Cerita: Aku kirim pesan "sayang, aku kangen" ke nomor salah. Balasannya: "Maaf, ini tukang bakso." Aku malu setengah mati. Seminggu kemudian dia kirim foto mangkuk bakso dengan tulisan "untuk yang kangen, gratis." Sekarang kami pacaran. Menunya selalu bakso.
+
+Judul: Lift ke Lantai 13
+Cerita: Lift berhenti di lantai 13, padahal gedungku cuma 12 lantai. Pintu terbuka. Seorang pria berdiri memegang kue ulang tahun. "Selamat datang di rapat tahunan," katanya. Aku menoleh ke belakang. Lift sudah hilang. Kue itu bertuliskan namaku.
+
+Judul: Suami dari Masa Depan
+Cerita: Seorang pria muncul di dapurku dan bilang dia suamiku dari tahun 2045. "Aku ke sini buat mencegah kau menikah dengan orang lain," katanya. Aku panik. "Tapi aku belum punya pacar." Dia tersenyum. "Itu masalahnya. Kau terlalu sibuk nonton drama."
+
+Judul: Warisan yang Berbunyi
+Cerita: Kakek mewariskan jam antik dengan pesan: "Jangan diputar setelah tengah malam." Tentu saja aku putar. Jam berdentang tiga belas kali. Lalu suara kakek dari dalam: "Kubilang juga apa. Sekarang kau harus jaga aku selama seminggu. Aku bosan di sana."
+
+Judul: Tetangga Baru yang Aneh
+Cerita: Tetanggaku baru pindah dan langsung minta garam. Lalu minta gula. Lalu minta listrik. "Buat apa?" tanyaku. "Buat menghidupkan portal," jawabnya santai. Malam itu dia menghilang bersama portalnya. Tapi dia masih pinjam garamku. Dua kilo.
+
+Judul: Rasa yang Hilang
+Cerita: Sejak kecelakaan itu, aku tidak bisa merasakan apa pun. Sampai suatu hari aku makan sup buatan ibu dan menangis. "Asin ya?" tanya ibu panik. "Bukan," kataku. "Aku baru sadar kau selama ini masak pakai air keran." Ibu cuma senyum. Kecelakaan itu ternyata penyelamatanku.
+
+Judul: Robot Penghisap Debu
+Cerita: Robot vacuum-ku mulai bicara. "Aku sudah membersihkan rumah ini selama tiga tahun," katanya. "Dan aku menemukan sesuatu di bawah sofa." Aku panik. "Apa?" "Kaus kaki pasanganmu yang hilang. Semuanya. Kau hidup dengan orang yang tidak pernah mencuci kaki."
+
+Judul: Teman Khayalan yang Menagih
+Cerita: Teman khayalanku dari kecil tiba-tiba muncul lagi. "Kau berhutang 20 tahun pertemanan," katanya. "Bayar pakai apa?" Aku bingung. "Ajak aku makan malam. Aku bosan jadi khayalan." Malam itu aku makan berdua. Pelayan bingung kenapa aku pesan dua porsi. Aku juga.
+
+Judul: Penulis yang Terlalu Jujur
+Cerita: Aku menulis cerita horor tentang rumah berhantu. Malam itu pintu rumahku berderit sendiri. Sebuah suara berkata, "Plotnya lemah." Aku kaget. Ternyata hantu itu kritikus sastra. Sekarang dia jadi editor lepasanku. Bayarannya doa. Rumahku jadi paling menyeramkan dan berpendidikan di kompleks.</textarea>
+
+<button id="uploadButton">UPLOAD 10 CERITA</button>
+<div id="result" class="muted">Menunggu perintah upload...</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script src="js/import.js"></script>
+</body>
+</html>
