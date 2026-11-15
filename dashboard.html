@@ -2,23 +2,55 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Jelajahi Reels — StoryReels</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#080808">
+<title>StoryReels — Global Feed</title>
 <link rel="stylesheet" href="css/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080808;color:white;overflow:hidden}
+header{position:fixed;top:0;left:0;width:100%;z-index:10;
+display:flex;justify-content:space-between;align-items:center;
+padding:16px 20px;background:linear-gradient(#0009,transparent)}
+.logo{color:white;text-decoration:none;font-weight:900}
+.logo span{color:#ff426d}
+.nav-link{color:white;text-decoration:none;font-size:12px}
+#reelGrid{height:100dvh;width:100%;overflow:hidden}
+.feed-item{height:100dvh;width:100%;position:relative;
+display:flex;align-items:center;justify-content:center;
+padding:80px 24px 120px;overflow:hidden;
+background:radial-gradient(ellipse at 50% 40%,#29202b,#080808 75%)}
+.story-content{width:100%;max-width:540px;max-height:65vh;
+overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere;
+font-size:clamp(21px,5vw,30px);line-height:1.65;
+font-weight:500;text-align:left;
+mask-image:linear-gradient(to bottom,#000 85%,transparent)}
+.story-info{position:absolute;bottom:32px;left:24px;right:85px}
+.story-title{font-size:19px;font-weight:800;margin-bottom:8px}
+.story-author{font-size:13px;color:#ff6687;margin-bottom:10px}
+.story-desc{font-size:13px;color:#bbb}
+.feed-actions{position:absolute;right:18px;bottom:42px;
+display:flex;flex-direction:column;gap:22px;align-items:center}
+.feed-actions a{color:white;text-decoration:none;text-align:center;
+font-size:12px}
+.feed-actions span{display:block;font-size:25px;margin-bottom:4px}
+.feed-counter{position:absolute;top:76px;right:20px;
+font-size:12px;color:#aaa}
+.empty-feed{height:100dvh;display:flex;align-items:center;
+justify-content:center;text-align:center;padding:30px;color:#aaa}
+.hint{position:absolute;top:78px;left:20px;color:#888;font-size:11px}
+</style>
 </head>
 <body>
 <header>
 <a class="logo" href="index.html">Story<span>Reels</span></a>
-<a class="nav-link" href="profile.html">PROFIL</a>
+<a class="nav-link" href="profile.html">PROFIL ↗</a>
 </header>
-<main class="page">
-<div class="muted">STORYREELS / EXPLORE</div>
-<h1>Temukan cerita.</h1>
-<p class="muted">Cerita dari seluruh penjuru keluarga StoryReels.</p>
-<div id="reelGrid" class="reel-grid">
-<p class="muted">Memuat cerita...</p>
+
+<div id="reelGrid">
+<div class="empty-feed">Memuat cerita dari seluruh dunia...</div>
 </div>
-</main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 <script src="js/dashboard.js"></script>
