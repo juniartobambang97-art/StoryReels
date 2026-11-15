@@ -770,6 +770,82 @@ Setiap kalimat akan menjadi bagian dari Reels."></textarea>
   }
  };
 
+ // Ambil cerita dari Supabase berdasarkan ID pada URL.
+ async function loadStoryFromDatabase() {
+  const storyId = new URLSearchParams(location.search).get("id");
+  if (!storyId) return;
+
+  if (typeof db === "undefined") {
+   alert("Koneksi database belum tersedia.");
+   return;
+  }
+
+  try {
+   const { data: story, error } = await db
+    .from("stories")
+    .select("id,title,content,creator_name")
+    .eq("id", storyId)
+    .single();
+
+   if (error) throw error;
+   if (!story) throw new Error("Cerita tidak ditemukan.");
+
+   const paragraphs = (story.content || "")
+    .replace(/\\r/g, "")
+    .split(/\\n+/)
+    .map(x => x.trim())
+    .filter(Boolean);
+
+   const result = [];
+
+   for (const paragraph of paragraphs) {
+    const chunks = paragraph.match(
+     /[^.!?…]+[.!?…]+(?:["'”’»)\\]]+)?|[^.!?…]+$/g
+    ) || [];
+
+    for (let chunk of chunks) {
+     chunk = chunk.trim();
+     if (!chunk) continue;
+
+     if (/^["'”’»)\\]]+$/.test(chunk) && result.length) {
+      result[result.length - 1] += chunk;
+     } else {
+      result.push(chunk);
+     }
+    }
+   }
+
+   if (!result.length) throw new Error("Isi cerita kosong.");
+
+   stop();
+   lines = result;
+   index = 0;
+   liked = false;
+   saved = false;
+   comments = [];
+
+   $("reelTitle").textContent = story.title || "Tanpa Judul";
+   $("reelDesc").textContent = "Cerita dari StoryReels.";
+   $("reelAuthor").textContent = "@" + (story.creator_name || "Creator");
+   $("reelLikes").textContent = "0";
+   $("reelLike").classList.remove("active");
+   $("reelLike").innerHTML = '♡<small id="reelLikes">0</small>';
+   $("reelSave").classList.remove("active");
+   $("reelSave").innerHTML = '☆<small>Favorit</small>';
+   $("reelComment").innerHTML = '☏<small>Komentar</small>';
+   $("reelProgress").value = 0;
+
+   render();
+   start();
+
+  } catch (error) {
+   console.error("Gagal memuat cerita:", error);
+   alert("Gagal memuat cerita: " + error.message);
+  }
+ }
+
+ loadStoryFromDatabase();
+
 })();
 </script>
 
