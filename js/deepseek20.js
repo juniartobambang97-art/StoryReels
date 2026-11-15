@@ -41,3 +41,41 @@ if (description) description.textContent =
 
 console.log("DeepSeek batch loaded:", stories.length);
 })();
+
+(() => {
+const input = document.getElementById("storyInput");
+const list = document.getElementById("previewList");
+const count = document.getElementById("previewCount");
+if (!input || !list || !count) return;
+
+function renderPreview() {
+  const regex = /Judul:\s*(.*?)\s*\nCerita:\s*([\s\S]*?)(?=\n\s*Judul:|$)/g;
+  const stories = [...input.value.matchAll(regex)]
+    .map(m => ({title:m[1].trim(), content:m[2].trim()}))
+    .filter(s => s.title && s.content);
+
+  count.textContent = stories.length + " cerita siap diperiksa";
+  list.innerHTML = "";
+
+  stories.forEach((story, i) => {
+    const card = document.createElement("article");
+    card.className = "preview-card";
+
+    const number = document.createElement("div");
+    number.className = "preview-number";
+    number.textContent = "CERITA " + String(i + 1).padStart(2, "0");
+
+    const title = document.createElement("h3");
+    title.textContent = story.title;
+
+    const content = document.createElement("p");
+    content.textContent = story.content;
+
+    card.append(number, title, content);
+    list.appendChild(card);
+  });
+}
+
+input.addEventListener("input", renderPreview);
+renderPreview();
+})();
