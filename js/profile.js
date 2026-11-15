@@ -3,23 +3,23 @@ const profileReels = document.getElementById("profileReels");
 
 const params = new URLSearchParams(location.search);
 let profileId = params.get("id");
-
 let currentUser = null;
 
-function el(tag, text, className) {
+const el = (tag, text = "", className = "") => {
   const node = document.createElement(tag);
-  node.textContent = text || "";
+  node.textContent = text;
   if (className) node.className = className;
   return node;
-}
+};
 
 async function loadProfile() {
+  profileContent.textContent = "Memuat profil...";
+  profileReels.replaceChildren();
+
   const { data: auth } = await db.auth.getUser();
   currentUser = auth.user;
 
-  if (!profileId && currentUser) {
-    profileId = currentUser.id;
-  }
+  if (!profileId && currentUser) profileId = currentUser.id;
 
   if (!profileId) {
     profileContent.textContent = "Profil tidak ditemukan.";
@@ -48,96 +48,142 @@ async function loadProfile() {
     return;
   }
 
-  const ownProfile = currentUser && currentUser.id === profileId;
+  const own = currentUser?.id === profileId;
 
-  const head = document.createElement("div");
-  head.className = "profile-head";
+  // Identitas kreator
+  const shell = el("section", "", "creator-profile");
 
-  const avatar = el("div",
-    (profile.display_name || profile.username || "?").charAt(0).toUpperCase(),
-    "avatar");
+  const cover = el("div", "", "profile-cover");
 
-  const identity = document.createElement("div");
-  identity.append(
-    el("h2", profile.display_name),
-    el("div", "@" + profile.username, "muted"),
-    el("p", profile.bio || "Belum ada deskripsi.", "muted")
+  const avatar = el(
+    "div",
+    (profile.display_name || profile.username || "?")
+      .charAt(0).toUpperCase(),
+    "profile-avatar"
   );
 
-  head.append(avatar, identity);
+  const identity = el("div", "", "profile-identity");
+  identity.append(
+    el("h1", profile.display_name || "Kreator"),
+    el("div", "@" + profile.username, "profile-username"),
+    el("p", profile.bio || "Belum ada bio. Dunia masih menunggu ceritamu.", "profile-bio")
+  );
 
-  const stats = document.createElement("div");
-  stats.className = "stats";
+  cover.append(avatar);
+  shell.append(cover, identity);
+
+  // Statistik
+  const stats = el("div", "", "profile-stats");
 
   const stat = (number, label) => {
-    const item = document.createElement("div");
-    item.append(el("strong", number), el("span", label));
+    const item = el("div", "", "profile-stat");
+    item.append(
+      el("strong", String(number)),
+      el("span", label)
+    );
     return item;
   };
 
   stats.append(
-    stat(stories.length, "Reels"),
-    stat("0", "Anak"),
-    stat("0", "Zigot ♥")
+    stat(stories.length, "REELS"),
+    stat("—", "ANAK"),
+    stat("—", "AYAH"),
+    stat("—", "IBU"),
+    stat("—", "ZIGOT ♥")
   );
 
-  profileContent.replaceChildren(head, stats);
+  // Anak, Ayah, Ibu dan Zigot menunggu sistem relasi/reaction.
+  shell.appendChild(stats);
 
-  if (ownProfile) {
-    const editProfile = el("button", "EDIT PROFIL");
-    editProfile.className = "primary";
+  const actions = el("div", "", "profile-actions");
 
-    editProfile.onclick = async () => {
+  if (own) {
+    const edit = el("button", "EDIT PROFIL");
+    edit.className = "primary";
+
+    edit.onclick = async () => {
       const name = prompt("Nama tampilan:", profile.display_name || "");
       if (name === null) return;
+      if (!name.trim()) return alert("Nama tidak boleh kosong.");
 
-      const bio = prompt("Bio:", profile.bio || "");
+      const bio = prompt("Bio kreator:", profile.bio || "");
       if (bio === null) return;
 
       const { error } = await db.from("profiles")
-        .update({ display_name: name.trim(), bio: bio.trim() })
+        .update({
+          display_name: name.trim(),
+          bio: bio.trim()
+        })
         .eq("id", currentUser.id);
 
       if (error) alert(error.message);
       else loadProfile();
     };
 
-    profileContent.appendChild(editProfile);
+    actions.appendChild(edit);
   }
 
+  const share = el("button", "SALIN TAUTAN ↗");
+  share.onclick = async () => {
+    const url = location.origin + "/profile.html?id=" +
+      encodeURIComponent(profileId);
+
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("Tautan profil berhasil disalin!");
+    } catch {
+      prompt("Salin tautan profil:", url);
+    }
+  };
+
+  actions.appendChild(share);
+  shell.appendChild(actions);
+
+  profileContent.replaceChildren(shell);
+
+  // Koleksi cerita
   profileReels.replaceChildren();
 
   if (!stories.length) {
-    profileReels.append(el("p", "Belum ada Reels.", "muted"));
+    profileReels.appendChild(
+      el("p", "Belum ada cerita. Kreator ini masih menyimpan rahasia. 🤣", "muted")
+    );
     return;
   }
 
   stories.forEach(story => {
-    const card = document.createElement("div");
-    card.className = "reel-card";
+    const card = el("article", "", "reel-card");
 
     card.append(
+      el("div", "STORYREELS / CERITA", "muted"),
       el("h3", story.title || "Tanpa judul"),
-      el("p", (story.content || "").slice(0, 120))
+      el("p", (story.content || "").slice(0, 180) +
+        ((story.content || "").length > 180 ? "..." : ""))
     );
 
-    const actions = document.createElement("div");
+    const actions = el("div", "", "profile-card-actions");
 
-    const open = el("a", "▶ TONTON");
+    const open = el("a", "▶ BACA CERITA");
     open.href = "reel.html?id=" + encodeURIComponent(story.id);
     actions.appendChild(open);
 
-    if (ownProfile) {
+    if (own) {
       const edit = el("button", "EDIT");
+
       edit.onclick = async () => {
         const title = prompt("Judul baru:", story.title || "");
         if (title === null) return;
+        if (!title.trim()) return alert("Judul tidak boleh kosong.");
 
-        const content = prompt("Isi cerita baru:", story.content || "");
+        const content = prompt("Isi cerita:", story.content || "");
         if (content === null) return;
+        if (!content.trim()) return alert("Cerita tidak boleh kosong.");
 
         const { error } = await db.from("stories")
-          .update({ title: title.trim(), content: content.trim() })
+          .update({
+            title: title.trim(),
+            content: content.trim()
+          })
           .eq("id", story.id)
           .eq("user_id", currentUser.id);
 
@@ -146,8 +192,9 @@ async function loadProfile() {
       };
 
       const remove = el("button", "HAPUS");
+
       remove.onclick = async () => {
-        if (!confirm("Hapus Reels ini?")) return;
+        if (!confirm("Yakin hapus cerita ini?")) return;
 
         const { error } = await db.from("stories")
           .delete()

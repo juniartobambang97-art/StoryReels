@@ -64,3 +64,128 @@ header{
  .reel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .hero h1{letter-spacing:-4px}
 }
+
+/* CREATOR PROFILE */
+.creator-profile {
+  margin: 24px 0;
+  padding: 22px;
+  border: 1px solid #292929;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #171717, #090909);
+  overflow: hidden;
+}
+
+.profile-cover {
+  height: 105px;
+  margin: -22px -22px 0;
+  background: linear-gradient(120deg, #30204c, #151515 65%, #39221e);
+}
+
+.profile-avatar {
+  width: 88px;
+  height: 88px;
+  margin-top: -45px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 5px solid #111;
+  border-radius: 50%;
+  background: #292929;
+  color: white;
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.profile-identity h1 {
+  margin: 12px 0 3px;
+  font-size: 27px;
+}
+
+.profile-username {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.profile-bio {
+  color: #ccc;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 22px 0;
+}
+
+.profile-stat {
+  padding: 13px 5px;
+  text-align: center;
+  background: #202020;
+  border-radius: 12px;
+}
+
+.profile-stat strong {
+  display: block;
+  font-size: 20px;
+}
+
+.profile-stat span {
+  display: block;
+  margin-top: 5px;
+  color: #aaa;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.profile-actions,
+.profile-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.profile-actions button,
+.profile-card-actions button,
+.profile-card-actions a {
+  padding: 10px 14px;
+  border: 1px solid #393939;
+  border-radius: 9px;
+  background: #222;
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.profile-card-actions a {
+  background: #36214c;
+  border-color: #604080;
+}
+
+.profile-card-actions button:hover,
+.profile-actions button:hover {
+  background: #393939;
+}
+
+.reel-card {
+  min-width: 0;
+}
+
+.reel-card p {
+  color: #bbb;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .profile-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .profile-stat strong {
+    font-size: 17px;
+  }
+}
