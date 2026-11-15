@@ -347,6 +347,36 @@ header, main, footer {display:none!important}
 }
 .reel-auth-btn:active {transform:scale(.95)}
 \n</style>
+
+<style>
+.reel-screen.reel-exit-up {
+ animation: reelExitUp .42s cubic-bezier(.22,.61,.36,1) forwards;
+}
+.reel-screen.reel-exit-down {
+ animation: reelExitDown .42s cubic-bezier(.22,.61,.36,1) forwards;
+}
+.reel-screen.reel-enter-up {
+ animation: reelEnterUp .42s cubic-bezier(.22,.61,.36,1) both;
+}
+.reel-screen.reel-enter-down {
+ animation: reelEnterDown .42s cubic-bezier(.22,.61,.36,1) both;
+}
+@keyframes reelExitUp {
+ to { transform:translateY(-100%); opacity:.7; }
+}
+@keyframes reelExitDown {
+ to { transform:translateY(100%); opacity:.7; }
+}
+@keyframes reelEnterUp {
+ from { transform:translateY(100%); }
+ to { transform:translateY(0); }
+}
+@keyframes reelEnterDown {
+ from { transform:translateY(-100%); }
+ to { transform:translateY(0); }
+}
+</style>
+
 </head>
 <body>
 
@@ -882,10 +912,23 @@ Setiap kalimat akan menjadi bagian dari Reels."></textarea>
  async function openPlaylistStory(i) {
   if (!playlist.length) return;
 
+  const screen = document.querySelector(".reel-screen");
+  const direction = i >= playlistIndex ? "up" : "down";
+  const changed = playlistIndex !== i;
+
   playlistIndex = (i + playlist.length) % playlist.length;
   const story = playlist[playlistIndex];
 
   stop();
+
+  if (changed && screen) {
+   screen.classList.remove("reel-exit-up","reel-exit-down",
+    "reel-enter-up","reel-enter-down");
+   screen.classList.add(direction === "up" ?
+    "reel-exit-up" : "reel-exit-down");
+
+   await new Promise(resolve => setTimeout(resolve, 420));
+  }
   lines = parsePlaylistStory(story.content);
   if (!lines.length) lines = ["Cerita ini belum memiliki isi."];
 
@@ -904,6 +947,17 @@ Setiap kalimat akan menjadi bagian dari Reels."></textarea>
   $("reelComment").innerHTML = '☏<small>Komentar</small>';
 
   render();
+
+  if (changed && screen) {
+   screen.classList.remove("reel-exit-up","reel-exit-down");
+   screen.classList.add(direction === "up" ?
+    "reel-enter-up" : "reel-enter-down");
+
+   setTimeout(() => {
+    screen.classList.remove("reel-enter-up","reel-enter-down");
+   }, 450);
+  }
+
   history.replaceState(null, "", "reel.html?id=" + story.id);
   start();
  }
