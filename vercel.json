@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/reel.html",
+      "permanent": false
+    }
+  ]
+}
